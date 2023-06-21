@@ -34,3 +34,7 @@ const dirPath=__dirname;
 console.log(__filename);//print the name of the file in which i have open(E:\INTERNSHIP\NODE\express-ts\src\app.ts)
 let newfilePath=path.join(dirPath,"text.js");//E:\INTERNSHIP\NODE\express-ts\src\text.js
 console.log(newfilePath);
+let extName=path.extname("E:\INTERNSHIP\NODE\express-ts\src\text.js");
+console.log(extName);//.js
+let baseName=path.basename("E:/INTERNSHIP/NODE/express-ts/src/text.js");
+console.log(baseName);//text.js
