@@ -26,7 +26,7 @@
 
 
 
-// fs--module-->to handle the file system
+// path--module-->to handle path of system
 import * as path from 'path'
 // console.log({path});
 console.log(__dirname);//print current directory in which currently am i.(E:\INTERNSHIP\NODE\express-ts\src)
@@ -38,3 +38,30 @@ let extName=path.extname("E:\INTERNSHIP\NODE\express-ts\src\text.js");
 console.log(extName);//.js
 let baseName=path.basename("E:/INTERNSHIP/NODE/express-ts/src/text.js");
 console.log(baseName);//text.js
+
+
+// fs module--> to handle file system
+import * as fs from 'fs';
+// write to a file
+let filePath=path.join(__dirname,"file.txt");
+console.log(filePath);
+//C-create
+//it creates file if it does not exists else it override
+fs.writeFileSync(filePath,"Hello I am a text file ");
+
+// read file
+const readFile = fs.readFileSync(filePath,'utf-8' );
+console.log(readFile);
+
+// //U-update
+fs.appendFileSync(filePath,"\nNewly added content");
+console.log("After update : ")
+console.log(fs.readFileSync(filePath,'utf-8'));
+
+//delete
+//delete
+fs.unlinkSync(filePath);
+
+
+
+
