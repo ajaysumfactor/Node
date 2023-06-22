@@ -96,20 +96,37 @@ const PORT: Number =Number(process.env.PORT || '3000');
 
 
 /*NPM*/
-const server=createServer((request:IncomingMessage,response: ServerResponse)=>{
-  console.log({request});
-     if(request.url=="/address"){
-        if(request.method==="GET"){
+// const server=createServer((request:IncomingMessage,response: ServerResponse)=>{
+//   console.log({request});
+//      if(request.url=="/address"){
+//         if(request.method==="GET"){
           
-          response.end(uc.upperCase("Hello World!"));
-        }else{
-            response.end("Worng method for this api")
-        }
-    }
-    else{
-      response.end("Please enter valid route");
-    }
-});
-server.listen(PORT, () => console.log(`server islistining at port ${PORT}`))
+//           response.end(uc.upperCase("Hello World!"));
+//         }else{
+//             response.end("Worng method for this api")
+//         }
+//     }
+//     else{
+//       response.end("Please enter valid route");
+//     }
+// });
+// server.listen(PORT, () => console.log(`server islistining at port ${PORT}`))
+
+/*Events */
+
+import { EventEmitter } from 'events';
+const eventBroker = new EventEmitter();
+
+eventBroker.on('event-1', () => {
+    console.log("event 1 is fired")
+})
+
+eventBroker.on('event-2', (ar1, ar2) => {
+    console.log(`event 2 is fired ${ar1} ,${ar2}`)
+})
+eventBroker.emit('event-1')
+eventBroker.emit('event-2', 'hello', 'world')
+
+
 
 
