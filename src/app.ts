@@ -4,13 +4,14 @@ import * as fs from 'fs';
 import * as uc from 'upper-case';
 
 
-import {createServer,IncomingMessage,ServerResponse} from 'http';
+import {createServer,IncomingMessage,Server,ServerResponse} from 'http';
 import express, { Request, Response, NextFunction } from 'express';
 const app=express();
 
 
  
-const PORT: Number =Number(process.env.PORT || '3000');
+// const PORT: Number =Number(process.env.PORT || '3000');
+const PORT:Number=3000;
 
 // console.log(PORT);
  
@@ -163,36 +164,47 @@ const PORT: Number =Number(process.env.PORT || '3000');
 
 
 /*send mail using nodemailer*/
-import nodemailer from 'nodemailer';
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: { user: "ajayverma.sumfactor@gmail.com", pass: "gdlhkzcitgkednwz" }
+// import nodemailer from 'nodemailer';
+// const transporter = nodemailer.createTransport({
+//   service: 'gmail',
+//   auth: { user: "ajayverma.sumfactor@gmail.com", pass: "gdlhkzcitgkednwz" }
+// })
+
+// let mailOptions = {
+//   from: "ajayverma.sumfactor@gmail.com",
+//   to: "ajayverma041999@gmail.com",
+//   subject: "NODEJS",
+//   text: "this is node js turorial"
+// }
+
+
+
+// app.get('/sendEmail', (req: Request, res: Response, next: NextFunction) => {
+
+//   transporter.sendMail(mailOptions, (error, info) => {
+//       if (error) return res.status(500).send({ error: error })
+
+//       console.log("🚀 ~ file: app.ts:80 ~ transporter.sendMail ~ info:", info)
+
+//       return res.status(200).send({ info: info})
+//   })
+
+
+// })
+
+// app.listen(3000);
+
+/*Database connection */
+
+import { connectDatabase } from "../src/Database/Connection"
+import router from "../src/Routes/routes";
+app.use('/',router);
+connectDatabase().then((response) => {
+
+  console.log(response)
+ const server:Server= app.listen(PORT, () => console.log(`server is running at port http://localhost:${PORT}`))
+
+}).catch((error) => {
+  console.log("🚀 ~ file: app.ts:102 ~ connectNodeDatabase ~ error:", error)
 })
-
-let mailOptions = {
-  from: "ajayverma.sumfactor@gmail.com",
-  to: "ajayverma041999@gmail.com",
-  subject: "NODEJS",
-  text: "this is node js turorial"
-}
-
-
-
-app.get('/sendEmail', (req: Request, res: Response, next: NextFunction) => {
-
-  transporter.sendMail(mailOptions, (error, info) => {
-      if (error) return res.status(500).send({ error: error })
-
-      console.log("🚀 ~ file: app.ts:80 ~ transporter.sendMail ~ info:", info)
-
-      return res.status(200).send({ info: info})
-  })
-
-
-})
-
-app.listen(3000);
-
-
-
 
