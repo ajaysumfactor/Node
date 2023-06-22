@@ -1,6 +1,7 @@
 import * as url from "url";
 import * as path from 'path';
 import * as fs from 'fs';
+import * as uc from 'upper-case';
 
 
 import {createServer,IncomingMessage,ServerResponse} from 'http';
@@ -72,17 +73,35 @@ const PORT: Number =Number(process.env.PORT || '3000');
  
  
   
+// const server=createServer((request:IncomingMessage,response: ServerResponse)=>{
+//   console.log({request});
+//      if(request.url=="/address"){
+//         if(request.method==="GET"){
+
+//           var adr = 'http://localhost:8080/default.htm?year=2017&month=february&weather=summer';
+        
+//           var q = url.parse(adr, true);
+  
+//           console.log("data", q)
+//           response.end("success");
+//         }else{
+//             response.end("Worng method for this api")
+//         }
+//     }
+//     else{
+//       response.end("Please enter valid route");
+//     }
+// });
+// server.listen(PORT, () => console.log(`server islistining at port ${PORT}`))
+
+
+/*NPM*/
 const server=createServer((request:IncomingMessage,response: ServerResponse)=>{
   console.log({request});
      if(request.url=="/address"){
         if(request.method==="GET"){
-
-          var adr = 'http://localhost:8080/default.htm?year=2017&month=february&weather=summer';
-        
-          var q = url.parse(adr, true);
-  
-          console.log("data", q)
-          response.end("success");
+          
+          response.end(uc.upperCase("Hello World!"));
         }else{
             response.end("Worng method for this api")
         }
@@ -92,8 +111,5 @@ const server=createServer((request:IncomingMessage,response: ServerResponse)=>{
     }
 });
 server.listen(PORT, () => console.log(`server islistining at port ${PORT}`))
-
-
-
 
 
