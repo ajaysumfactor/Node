@@ -5,6 +5,9 @@ import * as uc from 'upper-case';
 
 
 import {createServer,IncomingMessage,ServerResponse} from 'http';
+import express, { Request, Response, NextFunction } from 'express';
+const app=express();
+
 
  
 const PORT: Number =Number(process.env.PORT || '3000');
@@ -130,34 +133,65 @@ const PORT: Number =Number(process.env.PORT || '3000');
 
 /*upload files*/
  
-import multer from 'multer';
-import express, { Request, Response, NextFunction } from 'express';
-const storage = multer.diskStorage({
-  destination(req, file, callback) {
-      callback(null, './src')
-  },
-  filename(req, file, callback) {
-      callback(null, file.originalname)
-  },
+// import multer from 'multer';
+// import express, { Request, Response, NextFunction } from 'express';
+// const storage = multer.diskStorage({
+//   destination(req, file, callback) {
+//       callback(null, './src')
+//   },
+//   filename(req, file, callback) {
+//       callback(null, file.originalname)
+//   },
+// })
+
+
+// const upload = multer({ storage: storage })
+
+// const app=express();
+
+// app.get('/uploadFile', upload.single('profile'), (req: Request, res: Response, next: NextFunction) => {
+
+//   try {
+//       const file = req.file;
+//       console.log("🚀 ~ file: app.ts:46 ~ app.get ~ file:", file)
+//       res.status(200).send("file is sucessfully saved")
+//   } catch (error) {
+//       console.log("🚀 ~ file: app.ts:51 ~ app.get ~ error:", error)
+//   }
+// })
+// app.listen(3000);
+
+
+/*send mail using nodemailer*/
+import nodemailer from 'nodemailer';
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: { user: "ajayverma.sumfactor@gmail.com", pass: "gdlhkzcitgkednwz" }
 })
 
+let mailOptions = {
+  from: "ajayverma.sumfactor@gmail.com",
+  to: "ajayverma041999@gmail.com",
+  subject: "NODEJS",
+  text: "this is node js turorial"
+}
 
-const upload = multer({ storage: storage })
 
-const app=express();
 
-app.get('/uploadFile', upload.single('profile'), (req: Request, res: Response, next: NextFunction) => {
+app.get('/sendEmail', (req: Request, res: Response, next: NextFunction) => {
 
-  try {
-      const file = req.file;
-      console.log("🚀 ~ file: app.ts:46 ~ app.get ~ file:", file)
-      res.status(200).send("file is sucessfully saved")
-  } catch (error) {
-      console.log("🚀 ~ file: app.ts:51 ~ app.get ~ error:", error)
-  }
+  transporter.sendMail(mailOptions, (error, info) => {
+      if (error) return res.status(500).send({ error: error })
+
+      console.log("🚀 ~ file: app.ts:80 ~ transporter.sendMail ~ info:", info)
+
+      return res.status(200).send({ info: info})
+  })
+
+
 })
+
 app.listen(3000);
-
 
 
 
