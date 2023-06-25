@@ -198,6 +198,7 @@ const PORT:Number=3000;
 
 import { connectDatabase } from "../src/Database/Connection"
 import router from "../src/Routes/routes";
+app.use(express.json());
 app.use('/',router);
 connectDatabase().then((response) => {
 
