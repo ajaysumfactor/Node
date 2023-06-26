@@ -7,11 +7,13 @@ import * as uc from 'upper-case';
 import {createServer,IncomingMessage,Server,ServerResponse} from 'http';
 import express, { Request, Response, NextFunction } from 'express';
 const app=express();
+import { config } from 'dotenv';
+config();
 
 
  
-// const PORT: Number =Number(process.env.PORT || '3000');
-const PORT:Number=3000;
+const PORT: Number =Number(process.env.PORT || '3000');
+// const PORT:Number=3000;
 
 // console.log(PORT);
  

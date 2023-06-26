@@ -1,7 +1,7 @@
 import { executeQuery } from "../Database/Connection";
 import bcrypt from 'bcrypt';
-
-export const userRestration=async(req:any,res:any)=>{
+import { generateAccessToken } from "../util/server";
+ export const userRestration=async(req:any,res:any)=>{
     return new Promise(async(resolve,reject)=>{
         try {
             console.log(req.body, "in body")
@@ -41,6 +41,34 @@ export const userRestration=async(req:any,res:any)=>{
         } catch (error) {
             console.log("🚀 ~ file: userController.ts:19 ~ returnnewPromise ~ error:", error)
             return reject(error)
+        }
+    })
+}
+
+
+
+
+export const userlogin=async(req:any,res:any)=>{
+    return new Promise(async(resolve,reject)=>{
+        try{
+       const {email,password}=req.body;
+       const getRecord=`select * from user where email='${email}'`
+       let resultSet:any=await executeQuery(getRecord);
+       if(resultSet.length==0){
+        return res.status(404).send({message:"user not found please register and try again to login"})
+
+       }
+        const match: boolean=await bcrypt.compare(password,resultSet[0].password);
+        if (match == false) return res.status(400).send("Entered Password is Incorrect")
+
+        let user: any = { email: email as string, password: password as string }
+        let acessToken = generateAccessToken(user)
+
+        return resolve({ message: "User Sucessfully Logged in", data: resultSet, acessToken: acessToken})
+
+        }
+        catch(error){
+            console.log("new promise error",error);
         }
     })
 }
