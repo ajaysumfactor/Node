@@ -1,6 +1,6 @@
 import { executeQuery } from "../Database/Connection";
 import bcrypt from 'bcrypt';
-import { generateAccessToken } from "../util/server";
+import { generateAccessToken, refreshAccessToken } from "../util/server";
  export const userRestration=async(req:any,res:any)=>{
     return new Promise(async(resolve,reject)=>{
         try {
@@ -63,8 +63,9 @@ export const userlogin=async(req:any,res:any)=>{
 
         let user: any = { email: email as string, password: password as string }
         let acessToken = generateAccessToken(user)
-
-        return resolve({ message: "User Sucessfully Logged in", data: resultSet, acessToken: acessToken})
+        let refreshToken=refreshAccessToken({user:user});
+        console.log("refreshAccessToken---",refreshToken);
+        return resolve({ message: "User Sucessfully Logged in", data: resultSet, acessToken: acessToken,refreshToken:refreshToken})
 
         }
         catch(error){
