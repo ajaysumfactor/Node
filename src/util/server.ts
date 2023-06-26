@@ -18,3 +18,19 @@ interface refreshJwtToken{
 export const refreshAccessToken=(tokenUser: refreshJwtToken)=>{
  return jwt.sign(tokenUser.user,refreshToken)
 }
+
+
+export const verifyToken=(req:Request,res:Response,next:NextFunction)=>{
+    console.log({req});
+    if(req.headers['authorization']?.split(' ')[1]==null){
+        return res.sendStatus(401);
+
+    }
+
+    jwt.verify(req.headers['authorization']?.split(' ')[1],secret,(err:any,user:any)=>{
+        if(err){
+            return res.sendStatus(403);
+        }
+        next();
+    })
+}
