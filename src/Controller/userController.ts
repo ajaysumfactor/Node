@@ -1,6 +1,6 @@
 import { executeQuery } from "../Database/Connection";
 import bcrypt from 'bcrypt';
-import { generateAccessToken, refreshAccessToken } from "../util/server";
+import { generateAccessToken, refreshAccessToken ,verifyRefresh} from "../util/server";
 export const userRestration = async (req: any, res: any) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -84,6 +84,29 @@ export const getAllUser = async (req: any, res: any) => {
         }
         catch (error) {
             console.log("peomise error--->", error);
+        }
+    })
+}
+
+export const refresh=async(req:any,res:any)=>{
+    return new Promise(async (resolve,reject)=>{
+        try{
+             const {token,email}=req.body;
+             const isValid=verifyRefresh(email,token);
+             if(!isValid)
+             {
+                return res.status(401).json({success:false,error:"invalid token please try again"})
+             }
+             const getRecord = `select * from user where email='${email}'`
+             let resultSet: any = await executeQuery(getRecord);
+             let password: string=resultSet[0].password;
+             let user: any = { email: email as string, password: password as string }
+
+             let acessToken = generateAccessToken(user)
+             return resolve({ message: "successfully token generated", acessToken: acessToken})
+            }
+        catch(error){
+            console.log("refreshPromiseError",error);
         }
     })
 }

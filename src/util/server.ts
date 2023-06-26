@@ -1,5 +1,6 @@
 import express,{Request,Response,NextFunction,Application,ErrorRequestHandler} from 'express';
 import * as jwt from 'jsonwebtoken';
+import { JwtPayload } from 'jsonwebtoken';
 const secret:string=process.env.JWT_SECRET_KEY as string;
 const refreshToken=process.env.REFRESH_ACCESS_KEY as string;
 interface JwtToken{
@@ -34,3 +35,17 @@ export const verifyToken=(req:Request,res:Response,next:NextFunction)=>{
         next();
     })
 }
+
+
+
+export const verifyRefresh=(email:string,token:string):boolean=>{
+  try{
+  const decodedData=jwt.verify(token,refreshToken) as JwtPayload;
+  return decodedData.email===email;
+  }
+  catch(error)
+{
+    return false;
+}
+}
+
