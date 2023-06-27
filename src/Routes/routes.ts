@@ -9,5 +9,7 @@ router.get('/getAllUser',verifyToken,async(req:Request,res:Response)=>{
     res.status(200).send(await getAllUser(req,res))
 })
 router.post('/refresh', async (req: Request, res: Response) => { res.status(200).send(await refresh(req, res)) })
-
+router.get('/registerPageData',async(req:Request,res:Response)=>{
+    res.render('index.ejs')
+})
 export default router;

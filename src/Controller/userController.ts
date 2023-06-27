@@ -1,10 +1,14 @@
 import { executeQuery } from "../Database/Connection";
 import bcrypt from 'bcrypt';
-import { generateAccessToken, refreshAccessToken ,verifyRefresh} from "../util/server";
+import { generateAccessToken, refreshAccessToken, verifyRefresh } from "../util/server";
 export const userRestration = async (req: any, res: any) => {
     return new Promise(async (resolve, reject) => {
         try {
             console.log(req.body, "in body")
+            // Object.keys(req.body)-->return all the keys in array
+            if (Object.keys(req.body).length == 0) {
+                return res.status(404).send({ message: "no json body found" });
+            }
             let { f_name, l_name, email, password, token } = req.body
 
 
@@ -12,19 +16,19 @@ export const userRestration = async (req: any, res: any) => {
 
             //  const sqlQuery = `insert into user(f_name,l_name,email,password,token)values('${f_name}','${l_name}','${email}','${password}','${token}')`
             //  const sqlQuery=`select * from user`
-            const findData = `select * from user where email='${email}'`
 
             // const sqlQuery = `SELECT * FROM user as a join info as b  on a.email= b.email;`
 
 
 
 
+            const findData = `select * from user where email='${email}'`
 
             let getRecord: any = await executeQuery(findData)
 
 
             if (getRecord.length > 0) {
-                res.status(400).send({ message: "user is already registered please login" });
+                return res.status(400).send({ message: "user is already registered please login" });
             }
 
             const salt = await bcrypt.genSalt();
@@ -88,25 +92,24 @@ export const getAllUser = async (req: any, res: any) => {
     })
 }
 
-export const refresh=async(req:any,res:any)=>{
-    return new Promise(async (resolve,reject)=>{
-        try{
-             const {token,email}=req.body;
-             const isValid=verifyRefresh(email,token);
-             if(!isValid)
-             {
-                return res.status(401).json({success:false,error:"invalid token please try again"})
-             }
-             const getRecord = `select * from user where email='${email}'`
-             let resultSet: any = await executeQuery(getRecord);
-             let password: string=resultSet[0].password;
-             let user: any = { email: email as string, password: password as string }
-
-             let acessToken = generateAccessToken(user)
-             return resolve({ message: "successfully token generated", acessToken: acessToken})
+export const refresh = async (req: any, res: any) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const { token, email } = req.body;
+            const isValid = verifyRefresh(email, token);
+            if (!isValid) {
+                return res.status(401).json({ success: false, error: "invalid token please try again" })
             }
-        catch(error){
-            console.log("refreshPromiseError",error);
+            const getRecord = `select * from user where email='${email}'`
+            let resultSet: any = await executeQuery(getRecord);
+            let password: string = resultSet[0].password;
+            let user: any = { email: email as string, password: password as string }
+
+            let acessToken = generateAccessToken(user)
+            return resolve({ message: "successfully token generated", acessToken: acessToken })
+        }
+        catch (error) {
+            console.log("refreshPromiseError", error);
         }
     })
 }

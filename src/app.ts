@@ -9,8 +9,13 @@ import express, { Request, Response, NextFunction } from 'express';
 const app=express();
 import { config } from 'dotenv';
 config();
+import bodyParser from "body-parser";
 
-
+// =====================================================================
+app.use(bodyParser.json(),bodyParser.urlencoded({extended:false}));
+app.set("views",path.join(__dirname,"public"));
+// app.set("views-engine","ejs");
+//======================================================================
  
 const PORT: Number =Number(process.env.PORT || '3000');
 // const PORT:Number=3000;
